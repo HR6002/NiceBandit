@@ -1,2 +1,2 @@
 # NiceBandit
-A simple Password Secure  and Trustworthy Password Manager 
+A simple Secure and Trustworthy Password Manager. Thats it, nothing else...
