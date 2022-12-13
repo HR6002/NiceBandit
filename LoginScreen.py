@@ -63,9 +63,9 @@ def check_password(password):
     
     if not re.search(r'[^\w]', password):
         return False
-    if binary_search(store_10k(), format_password(password)):
+    if binary_search(store_10k(), format_password(password))==True:
         return False
-    if check_consequitivenumbers(password):
+    if check_consequitivenumbers(password)==True :
         return False
 
     
