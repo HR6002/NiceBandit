@@ -2,14 +2,56 @@ import csv
 import re
 import time
 
-with open("/home/hysam/Desktop/NiceBandit/Muser.csv") as csvfile:
-    rows=csv.reader(csvfile)
-    masterusernames= next(rows)
-    masterpasswords=next(rows)
+#with open("/home/hysam/Desktop/NiceBandit/Muser.csv") as csvfile:
+    #rows=csv.reader(csvfile)
+    #masterusernames= next(rows)
+    #masterpasswords=next(rows)
 
 
-            
 
+
+
+def store_10k():
+    k=[]
+    with open ("10kasswords.txt.py", "r") as file :
+        lines= file.readlines()
+        for things in lines
+        if len(linesa) >8:
+            if linesa.isalpha():
+                k.append(linesa)
+
+    return k
+
+
+
+
+
+
+
+def binary_search(items, target):
+
+    min = 0
+    max = len(items) - 1
+
+
+    while min <= max:
+
+        mid = (min + max) // 2
+
+
+        if items[mid] == target:
+            return True
+
+
+        elif target < items[mid]:
+            max = mid - 1
+
+
+        else:
+            min = mid + 1
+
+
+    return False
 
 
 def check_password(password):
@@ -26,6 +68,9 @@ def check_password(password):
     
     if not re.search(r'[^\w]', password):
         return False
+    if binary_search(store_10k(), format_password(password)):
+        return False
+
     
     return True
 
@@ -85,12 +130,15 @@ def register():
                 elif paswrd=="exit":
                     break
                 else:
-                    print("\npassword must be 8 charecters long or more, it must have a combination \nof lower case and uppercase charecters including special charecters\n")
+                    print("\npassword must be 8 charecters long or more, it must have a combination \nof lower case and uppercase charecters including special charecters\n and it must not be too  common ")
 
         else:
             print("username already exists!")
        
 
+
+def format_password(password):
+    return re.sub(r'[^a-zA-Z]', '', password)
 
 
 
@@ -117,5 +165,5 @@ def login_screen():
             print("invalid Option")
 
 
+print(store_10k())
 
-login_screen()
