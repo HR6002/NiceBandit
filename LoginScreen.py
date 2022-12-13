@@ -2,25 +2,20 @@ import csv
 import re
 import time
 
-#with open("/home/hysam/Desktop/NiceBandit/Muser.csv") as csvfile:
-    #rows=csv.reader(csvfile)
-    #masterusernames= next(rows)
-    #masterpasswords=next(rows)
+with open("/home/hysam/Desktop/NiceBandit/Muser.csv") as csvfile:
+    rows=csv.reader(csvfile)
+    masterusernames= next(rows)
+    masterpasswords=next(rows)
 
 
 
 
 
 def store_10k():
-    k=[]
-    with open ("10kasswords.txt.py", "r") as file :
+    with open ("/home/hysam/Desktop/NiceBandit/10kasswords.txt", "r") as file :
         lines= file.readlines()
-        for things in lines
-        if len(linesa) >8:
-            if linesa.isalpha():
-                k.append(linesa)
 
-    return k
+    return lines
 
 
 
@@ -39,7 +34,7 @@ def binary_search(items, target):
         mid = (min + max) // 2
 
 
-        if items[mid] == target:
+        if target.lower() in items[mid].lower():
             return True
 
 
@@ -69,6 +64,8 @@ def check_password(password):
     if not re.search(r'[^\w]', password):
         return False
     if binary_search(store_10k(), format_password(password)):
+        return False
+    if check_consequitivenumbers(password):
         return False
 
     
@@ -142,6 +139,36 @@ def format_password(password):
 
 
 
+def check_consequitivenumbers(numericpasswrd): 
+    num = re.findall(r'\d+', numericpasswrd)
+    
+    counter = 0
+    
+
+    for numbers in num:
+        length = len(numbers)
+        if length >= 3:
+            for i in range(length-1):
+                first_digit = numbers[i]
+                second_digit = numbers[i + 1]
+                if int(second_digit) - int(first_digit) == 1:
+                    counter += 1
+    print (counter)
+    if counter >= 2:
+        return True
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 def save_passwords():
@@ -165,5 +192,5 @@ def login_screen():
             print("invalid Option")
 
 
-print(store_10k())
+login_screen()
 
