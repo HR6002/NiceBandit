@@ -123,6 +123,7 @@ def register():
                     masterpasswords.append(paswrd)
                     csv_file=open((f"{usrname}.csv"), "w")
                     csv_file.close()
+                    save_passwords()
                     break
                 elif paswrd=="exit":
                     break
