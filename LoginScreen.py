@@ -151,21 +151,13 @@ def check_consequitivenumbers(numericpasswrd):
             for i in range(length-1):
                 first_digit = numbers[i]
                 second_digit = numbers[i + 1]
-                if int(second_digit) - int(first_digit) == 1:
+                if int(second_digit) - int(first_digit) == 1 :
+                    counter += 1
+                elif int(second_digit)-int(first_digit)==0:
                     counter += 1
     print (counter)
     if counter >= 2:
         return True
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -192,5 +184,5 @@ def login_screen():
             print("invalid Option")
 
 
-login_screen()
+
 
