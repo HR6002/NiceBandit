@@ -4,9 +4,7 @@ import random
 import string
 
 
-#Main Function:
-#1- Users can store password with its associated username and website
-#2- users can lookup passwords either by entering the username or website (if website is enetered then it returns all the usernames and the passwordsm )
+
 def file(files):
     global target
     target=files
