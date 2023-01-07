@@ -1,16 +1,13 @@
 import csv
 import re
 import time
+import hashlib
 from MainPassword import*
 
 with open("/home/hysam/Desktop/NiceBandit/Muser.csv") as csvfile:
     rows=csv.reader(csvfile)
     masterusernames= next(rows)
-    masterpasswords=next(rows)
-
-
-
-
+    masterpassword_hashes=next(rows)
 
 def store_10k():
     with open ("/home/hysam/Desktop/NiceBandit/10kasswords.txt", "r") as file :
@@ -18,105 +15,67 @@ def store_10k():
 
     return lines
 
-
-
-
-
-
-
 def binary_search(items, target):
-
     min = 0
     max = len(items) - 1
-
-
     while min <= max:
-
         mid = (min + max) // 2
-
-
         if target.lower() in items[mid].lower():
             return True
-
-
         elif target < items[mid]:
             max = mid - 1
-
-
         else:
             min = mid + 1
-
-
     return False
-
 
 def check_password(password):
     if len(password) < 8:
         return False
     if not re.search(r'\d', password):
         return False
-    
     if not re.search(r'[A-Z]', password):
         return False
-    
     if not re.search(r'[a-z]', password):
         return False
-    
     if not re.search(r'[^\w]', password):
         return False
     if binary_search(store_10k(), format_password(password))==True:
         return False
     if check_consequitivenumbers(password)==True :
         return False
-
-    
     return True
 
-
-
 def login():
-    
-        usrname=input("Enter username: ")
-        if usrname in masterusernames:
-            indx=masterusernames.index(usrname)
-            psswrdd=input("enter password: ")
-            if psswrdd == masterpasswords[indx]:
-                print(f"\nWelcome {usrname}!\n")
-                file(f"{usrname}")
-                tidyUp()
-                
-
-
-            else:
-                print("Wrong password 4 Attempts remaining")
-                for i in range (0,4):
-                    psswrdd=input("enter password: ")
-                    if psswrdd == masterpasswords[indx]:
-                        print(f"\nWelcome {usrname}!\n")
-                        file(f"{usrname}")
-                        tidyUp()
-                        
-                        
-                    elif psswrdd =="exit":
-                        return False
-                for i in range(0,50):
-                    print("too many Attempts!")
-                    time.sleep(0.5)
-
-        
-            
+    usrname=input("Enter username: ")
+    if usrname in masterusernames:
+        indx=masterusernames.index(usrname)
+        psswrdd=input("enter password: ")
+        # Hash the entered password using SHA-256
+        hashed_psswrdd = hashlib.sha256(psswrdd.encode()).hexdigest()
+        if hashed_psswrdd == masterpassword_hashes[indx]:
+            print(f"\nWelcome {usrname}!\n")
+            file(f"{usrname}")
+            tidyUp()
         else:
-            print("wrong username!")
-            
+            print("Wrong password 4 Attempts remaining")
+            for i in range (0,4):
+                psswrdd=input("enter password: ")
+                # Hash the entered password using SHA-256
+                hashed_psswrdd = hashlib.sha256(psswrdd.encode()).hexdigest()
+                if hashed_psswrdd == masterpassword_hashes[indx]:
+                    print(f"\nWelcome {usrname}!\n")
+                    file(f"{usrname}")
+                    tidyUp()
+                elif psswrdd =="exit":
+                    return False
+            for i in range(0,50):
+                print("too many Attempts!")
+                time.sleep(0.5)
+    else:
 
-
-
-
-
-
+                        print("wrong username!")
 
 def register():
-    
     while True:
         usrname=input("Enter A username: \n")
         if usrname =="exit":
@@ -125,8 +84,10 @@ def register():
             while True:
                 paswrd=input("enter a password: \n")
                 if check_password(paswrd):
+                    # Hash the password using SHA-256
+                    hashed_paswrd = hashlib.sha256(paswrd.encode()).hexdigest()
                     masterusernames.append(usrname)
-                    masterpasswords.append(paswrd)
+                    masterpassword_hashes.append(hashed_paswrd)
                     csv_file=open((f"/home/hysam/Desktop/NiceBandit/{usrname}.csv"), "w") 
                     with open(f"/home/hysam/Desktop/NiceBandit/{usrname}.csv", "w") as bob:
                         csv_writer=csv.writer(bob)
@@ -136,14 +97,15 @@ def register():
                         csv_file.close()
                         save_passwords()
                         break
-                    
                 elif paswrd=="exit":                    
                     break
                 else:
-                    print("\npassword must be 8 charecters long or more, it must have a combination \nof lower case and uppercase charecters including special charecters\n and it must not be too  common ")
-
+                    print("\npassword must be 8 charecters long or more, it must have a combination \nof lower case and uppercase letters, it must have a number and a special character ")
+                    print("\npassword must not be found in top 10k most used passwords \npassword must not contain a series of 3 or more consequitive numbers or letters\n")
         else:
-            print("username already exists!")
+            print("username already taken")
+
+
        
 
 
@@ -179,9 +141,9 @@ def check_consequitivenumbers(numericpasswrd):
 def save_passwords():
     with open("/home/hysam/Desktop/NiceBandit/Muser.csv", "w") as file:
         csv_writer=csv.writer(file)
-        #csv_writer.writerow([])
         csv_writer.writerow(masterusernames)
-        csv_writer.writerow(masterpasswords)
+        csv_writer.writerow(masterpassword_hashes)
+
 
 
 
@@ -195,6 +157,7 @@ def login_screen():
             save_passwords()
         else:
             print("invalid Option")
+
 
 
 
