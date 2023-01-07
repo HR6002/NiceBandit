@@ -50,7 +50,7 @@ def login():
     if usrname in masterusernames:
         indx=masterusernames.index(usrname)
         psswrdd=input("enter password: ")
-        # Hash the entered password using SHA-256
+        
         hashed_psswrdd = hashlib.sha256(psswrdd.encode()).hexdigest()
         if hashed_psswrdd == masterpassword_hashes[indx]:
             print(f"\nWelcome {usrname}!\n")
@@ -60,7 +60,7 @@ def login():
             print("Wrong password 4 Attempts remaining")
             for i in range (0,4):
                 psswrdd=input("enter password: ")
-                # Hash the entered password using SHA-256
+                
                 hashed_psswrdd = hashlib.sha256(psswrdd.encode()).hexdigest()
                 if hashed_psswrdd == masterpassword_hashes[indx]:
                     print(f"\nWelcome {usrname}!\n")
@@ -84,7 +84,7 @@ def register():
             while True:
                 paswrd=input("enter a password: \n")
                 if check_password(paswrd):
-                    # Hash the password using SHA-256
+                    
                     hashed_paswrd = hashlib.sha256(paswrd.encode()).hexdigest()
                     masterusernames.append(usrname)
                     masterpassword_hashes.append(hashed_paswrd)
