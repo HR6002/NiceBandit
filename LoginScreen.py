@@ -1,6 +1,7 @@
 import csv
 import re
 import time
+from MainPassword import*
 
 with open("/home/hysam/Desktop/NiceBandit/Muser.csv") as csvfile:
     rows=csv.reader(csvfile)
@@ -74,30 +75,34 @@ def check_password(password):
 
 
 def login():
-    while True:
+    
         usrname=input("Enter username: ")
         if usrname in masterusernames:
             indx=masterusernames.index(usrname)
             psswrdd=input("enter password: ")
             if psswrdd == masterpasswords[indx]:
                 print(f"\nWelcome {usrname}!\n")
-                return usrname
-            elif psswrdd=="exit":
-                break
+                file(f"{usrname}")
+                tidyUp()
+                
+
+
             else:
                 print("Wrong password 4 Attempts remaining")
                 for i in range (0,4):
                     psswrdd=input("enter password: ")
                     if psswrdd == masterpasswords[indx]:
                         print(f"\nWelcome {usrname}!\n")
-                        return usrname
+                        file(f"{usrname}")
+                        tidyUp()
+                        
+                        
                     elif psswrdd =="exit":
                         return False
                 for i in range(0,50):
                     print("too many Attempts!")
                     time.sleep(0.5)
-        elif usrname=="exit":
-            break
+
         
             
         else:
@@ -111,6 +116,7 @@ def login():
 
 
 def register():
+    
     while True:
         usrname=input("Enter A username: \n")
         if usrname =="exit":
@@ -121,11 +127,17 @@ def register():
                 if check_password(paswrd):
                     masterusernames.append(usrname)
                     masterpasswords.append(paswrd)
-                    csv_file=open((f"{usrname}.csv"), "w")
-                    csv_file.close()
-                    save_passwords()
-                    break
-                elif paswrd=="exit":
+                    csv_file=open((f"/home/hysam/Desktop/NiceBandit/{usrname}.csv"), "w") 
+                    with open(f"/home/hysam/Desktop/NiceBandit/{usrname}.csv", "w") as bob:
+                        csv_writer=csv.writer(bob)
+                        csv_writer.writerow (["-USERNAMES-"])
+                        csv_writer.writerow (["-PASSWORDS-"])
+                        csv_writer.writerow(["-WEBSITES-"])
+                        csv_file.close()
+                        save_passwords()
+                        break
+                    
+                elif paswrd=="exit":                    
                     break
                 else:
                     print("\npassword must be 8 charecters long or more, it must have a combination \nof lower case and uppercase charecters including special charecters\n and it must not be too  common ")
